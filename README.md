@@ -1,17 +1,19 @@
 #   HEDP module
 
-[![Build Status](https://travis-ci.org/luli/hedp.svg?branch=master)](https://travis-ci.org/luli/hedp)
-
 A Python module to analyse High Energy Density (HED) experiments and radiation hydrodynamics simulations.
 
 
 ## Installation
 
-    python setup.py develop --user
+    pip install .
+
+For a development (editable) install:
+
+    pip install -e .
 
 
 ## Dependencies
-   This module requires Python 2.7, 3.3 or 3.4  with  `numpy`, `scipy`,  `cython`, `pytables` and `opacplot2` ( https://github.com/rth/opacplot2).
+   This module requires Python 3.6+ with `numpy`, `scipy`, `cython`, `pytables` and `opacplot2` ( https://github.com/rth/opacplot2).
 
 
  Optional dependencies include:
