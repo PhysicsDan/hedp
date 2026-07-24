@@ -1,7 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import numpy as np
-from scipy.integrate import cumtrapz
+try:
+    from numpy import trapezoid
+except ImportError:  # NumPy < 2.0
+    from numpy import trapz as trapezoid
+from scipy.integrate import cumulative_trapezoid as cumtrapz
 
 from scipy.interpolate import interp1d
 from scipy.ndimage import map_coordinates
@@ -197,7 +201,7 @@ def _sop_calibration(lmbda, F,  transmission, detectorsize,
         max_idx = np.argmax(transmission)
         Tr_max = transmission[max_idx]  #tr_itp(420.)
         lmbda_max = lmbda[max_idx]
-        dlmbda = np.abs(np.trapz(transmission, lmbda)/Tr_max) # nm
+        dlmbda = np.abs(trapezoid(transmission, lmbda)/Tr_max) # nm
 
         Flux_coeff = K_Jcounts/(S_px * solid_angle  * t_px * Tr_max * dlmbda *\
                                     mstreak_sens(lmbda_max)/mstreak_sens(532.))
@@ -207,7 +211,7 @@ def _sop_calibration(lmbda, F,  transmission, detectorsize,
         
         K = (S_px * solid_angle  * t_px)/K_Jcounts
 
-        counts = K * np.trapz(
+        counts = K * trapezoid(
                 (transmission*mstreak_sens(lmbda)/mstreak_sens(532.))[np.newaxis,:]\
                 *planck(lmbda[np.newaxis,:], tele[:,np.newaxis]),
                 dx=np.diff(lmbda*1e-9)[0], axis=1)
@@ -246,7 +250,7 @@ def _se_calibration_goi(lmbda, F, transmission, detectorsize, gain, timewindow,
     # Approximate width of the filter system ( ~10 nm):
     if method == 'explicit':
         Tr_max = np.max(transmission)
-        dlmbda = np.abs(np.trapz(transmission, lmbda)/Tr_max) # nm 
+        dlmbda = np.abs(trapezoid(transmission, lmbda)/Tr_max) # nm 
 
         Flux_coeff = K_Jcounts/(S_px * solid_angle  * timewindow * Tr_max * dlmbda)
         return Flux_coeff
@@ -254,7 +258,7 @@ def _se_calibration_goi(lmbda, F, transmission, detectorsize, gain, timewindow,
     elif method == 'implicit':
         K = (S_px * solid_angle  * timewindow)/K_Jcounts
 
-        counts = K * np.trapz(
+        counts = K * trapezoid(
                 transmission[np.newaxis,:]\
                 *planck(lmbda[np.newaxis,:], tele[:,np.newaxis]),
                 dx=np.diff(lmbda*1e-9)[0], axis=1)
