@@ -35,12 +35,12 @@ def rect_mask(rect, X, Y, mask=None):
         clines = lines[idx]
         # equation of the form b*y = 1
         if abs(clines[0,0]) < SMALL:
-            midx = np.sort((1./clines[:,1]).astype(np.int))
+            midx = np.sort((1./clines[:,1]).astype(int))
             mask[:midx[0],:] = 0
             mask[midx[1]:,:] = 0
         # equation of the form a*x = 1
         elif abs(clines[0,1]) < SMALL:
-            midx = np.sort((1./clines[:,0]).astype(np.int))
+            midx = np.sort((1./clines[:,0]).astype(int))
             mask[:, :midx[0]] = 0
             mask[:, midx[1]:] = 0
         # equation of the form c_0*x + c_1*y = 1
@@ -50,4 +50,4 @@ def rect_mask(rect, X, Y, mask=None):
             b_min, b_max = np.sort(1./clines[:,1])
             mask = rect_mask_comp(X,Y, mask, a, b_min, b_max)
 
-    return np.asarray(mask, dtype=np.bool)
+    return np.asarray(mask, dtype=bool)

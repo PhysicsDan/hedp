@@ -10,7 +10,7 @@ import hedp.rad as rad
 from hedp.cst import eV2K
 from scipy import constants as cst
 from scipy.constants import physical_constants
-from scipy.integrate import quad, quadrature
+from scipy.integrate import quad
 
 #import matplotlib.pyplot as plt
 from numpy.testing import assert_allclose

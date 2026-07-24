@@ -93,8 +93,8 @@ def savgol(x, y, window_size=3, order=2, deriv=0):
     """
 
     try:
-        window_size = np.abs(np.int(window_size))
-        order = np.abs(np.int(order))
+        window_size = np.abs(int(window_size))
+        order = np.abs(int(order))
     except ValueError:
         raise ValueError("window_size and order have to be of type int")
     if window_size > len(x):

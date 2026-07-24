@@ -7,7 +7,11 @@
 import numpy as np
 from hedp.cst import eV2K, eV2Hz
 from scipy import constants as cst
-from scipy.integrate import simps, quad
+from scipy.integrate import quad
+try:
+    from scipy.integrate import simpson as simps  # scipy >= 1.6
+except ImportError:
+    from scipy.integrate import simps  # scipy < 1.6
 
 
 def planck(x, tele, var='lambda'):

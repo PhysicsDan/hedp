@@ -22,7 +22,7 @@ def opacity_map( dens, tele, mat, nu, backend='snop', mat_names=None, tables=Non
     assert dens.shape == tele.shape, 'dens and tele arrays should be of the same shape'
     op = np.zeros(dens.shape+nu.shape)*np.nan
     if mat_names is not None:
-        mat = mat.astype(np.int)
+        mat = mat.astype(int)
     for mat_el in np.unique(mat):
         mat_mask = (mat == mat_el)
         if mat_names is not None:

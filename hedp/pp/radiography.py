@@ -10,6 +10,10 @@ import os, os.path
 import warnings
 
 import numpy as np
+try:
+    from numpy import trapezoid
+except ImportError:  # NumPy < 2.0
+    from numpy import trapz as trapezoid
 import hedp
 from hedp.math.abel import abel 
 from hedp.diags.xray import xray_filter_transmission, Kalpha_profile,\
@@ -26,7 +30,7 @@ def backlighter_setup(bl):
     op = em_ff + em_Kalpha
     transmission = xray_filter_transmission(nu, layers=bl['filters'])
     spec_ip = op*transmission*ip_sensitivity(nu)
-    Norm = np.trapz(spec_ip, nu)
+    Norm = trapezoid(spec_ip, nu)
     spec_ip = spec_ip/Norm
     kalpha_nu0 = nu[np.argmax(em_Kalpha)]/1e3
 

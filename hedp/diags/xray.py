@@ -8,6 +8,10 @@
 import hedp
 from hedp.opacity.henke import cold_opacity
 import numpy as np
+try:
+    from numpy import trapezoid
+except ImportError:  # NumPy < 2.0
+    from numpy import trapz as trapezoid
 
 def photon_deposition_depth(nu, op, I0, depth):
     """
@@ -34,7 +38,7 @@ def photon_deposition_depth(nu, op, I0, depth):
     I0 = np.repeat(I0.reshape((-1,1)), Ndepth, axis=1)
     depth = np.repeat(depth.reshape((1,-1)), Nnu, axis=0)
 
-    return np.trapz(I0*nu*op*np.exp(-op*depth), nu, axis=0)
+    return trapezoid(I0*nu*op*np.exp(-op*depth), nu, axis=0)
 
 
 def ip_sensitivity(nu, type='MS'):
@@ -125,7 +129,7 @@ def ff_profile(nu, tele):
 def compute_spectra(pars, nu, bl_el='Cl'):
     a, b, dkalpha, tele = pars
     spectra = a*Kalpha_profile(bl_el, nu, dkalpha) + b*ff_profile(nu, tele)
-    spectra /= np.trapz(spectra, nu)
+    spectra /= trapezoid(spectra, nu)
     return spectra
 
 class StepsIP(object):
@@ -161,10 +165,10 @@ class StepsIP(object):
         def ofunc(pars, x, sp_sens, nu, el):
             a, b, dkalpha, tele = pars
             spectra = a*Kalpha_profile(el, nu, dkalpha) + b*ff_profile(nu, tele)
-            spectra /= np.trapz(spectra, nu)
+            spectra /= trapezoid(spectra, nu)
 
             spectra = np.tile(spectra, (sp_sens.shape[0], 1))
-            comp_tr = np.trapz(sp_sens*spectra, nu, axis=-1)
+            comp_tr = trapezoid(sp_sens*spectra, nu, axis=-1)
             return comp_tr
 
 
@@ -179,7 +183,7 @@ class StepsIP(object):
             for this_thick in thick:
                 sp_sens = np.exp(-cold_opacity(el, nu=nu)*this_thick)\
                         * sp_tr_filters * ip_sens * spectra
-                comp_tr.append(np.trapz(sp_sens, nu, axis=0))
+                comp_tr.append(trapezoid(sp_sens, nu, axis=0))
 
             return np.array(comp_tr).reshape((1,-1))
             #return ((comp_tr - exp_tr)**2).sum()

@@ -6,6 +6,10 @@
 # This software is governed by the CeCILL-B license under French law and
 # abiding by the rules of distribution of free software.
 import numpy as np
+try:
+    from numpy import trapezoid
+except ImportError:  # NumPy < 2.0
+    from numpy import trapz as trapezoid
 from ..math.integrals import Int_super_gaussian
 from ..math.integrals import Int_super_gaussian1D
 
@@ -84,7 +88,7 @@ class LaserBeams(object):
             self.P_power = [S0*P_pattern for P_pattern, S0 in zip(self.P_pattern, self.beam_surface)]
         else:
             raise ValueError
-        self.Energy = [ np.trapz(P_power,  self.P_time) for P_power in self.P_power]
+        self.Energy = [ trapezoid(P_power,  self.P_time) for P_power in self.P_power]
 
 
     def _get_beams_surface(self):
@@ -144,10 +148,10 @@ class LaserBeams(object):
 
             for idx, cross_section in enumerate(self.p['ed_crossSectionFunctionType']):
                 if cross_section == 'gaussian2D':
-                    self.gridnRadialTics = np.asarray([ rays_per_cell*beam_size/dx for beam_size in self.targetSemiAxis], dtype=np.int)
+                    self.gridnRadialTics = np.asarray([ rays_per_cell*beam_size/dx for beam_size in self.targetSemiAxis], dtype=int)
                     self.numberOfRays = self.gridnRadialTics*int(radial_ticks_to_rays_factor)
                 elif cross_section == 'gaussian1D':
-                    self.gridnRadialTics = np.asarray([ rays_per_cell*beam_size/dx for beam_size in self.targetSemiAxis], dtype=np.int)
+                    self.gridnRadialTics = np.asarray([ rays_per_cell*beam_size/dx for beam_size in self.targetSemiAxis], dtype=int)
                     self.numberOfRays = self.gridnRadialTics*int(radial_ticks_to_rays_factor)
                 else:
                     raise NotImplementedError

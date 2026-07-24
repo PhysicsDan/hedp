@@ -149,7 +149,7 @@ class HamamatsuFile(object):
         header = re.sub(r'(?P<section>\[[^\]]+\])', '\n\g<section>', header.decode('latin1'))
         header = header.splitlines()[1:]
         self.header = dict([self._header_sect2dict(line) for line in header])
-        self.shape = np.array(self.header['Acquisition']['areGRBScan'].split(',')[-2:]).astype(np.int)
+        self.shape = np.array(self.header['Acquisition']['areGRBScan'].split(',')[-2:]).astype(int)
         f.close()
 
         offset_list = {'auto': self._offset_auto,
