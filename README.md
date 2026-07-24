@@ -13,7 +13,7 @@ For a development (editable) install:
 
 
 ## Dependencies
-   This module requires Python 3.6+ with `numpy`, `scipy`, `cython`, `pytables` and `opacplot2` ( https://github.com/rth/opacplot2).
+   This module requires Python 3.6+ with `numpy`, `scipy`, `cython`, `pytables` and `opacplot2` (https://github.com/PhysicsDan/opacplot2).
 
 
  Optional dependencies include:
